@@ -12,6 +12,7 @@ http.interceptors.response.use(config => {
     return JSON.parse(data.replace(/^_(?:_jsonp)?\((.*)\)$/, '$1'))
 })
 
+
 const fetchGuardList = async (page = 1, refresh = false): Promise<any> => {
     const t = refresh ? `&t=${Date.now()}` : ''
     return await http.get('', {
@@ -32,7 +33,11 @@ export function useGuardList() {
         const { code, data } = await fetchGuardList(page, refresh)
         if (code !== 0) return
         const { info, list } = data
-        _list = [..._list, ...list]
+        if (page === 1){
+            _list = list
+        }else{
+            _list = [..._list, ...list]
+        }
         if (page === info.page) {
             _list = [...data.top3, ..._list]
             guardList.value = [..._list.filter(_ => _.is_alive === 1), ..._list.filter(_ => _.is_alive === 0)]
