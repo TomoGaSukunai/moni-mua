@@ -13,6 +13,7 @@ http.interceptors.response.use(config => {
     // return JSON.parse(data)
 })
 
+
 const fetchGuardList = async (page = 1, refresh = false): Promise<any> => {
     const t = refresh ? `&t=${Date.now()}` : ''
     return await http.get('', {
