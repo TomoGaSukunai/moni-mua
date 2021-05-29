@@ -28,6 +28,9 @@
     <div class="flex-1">
       <h3 class="title">朝海沫霓Moni Mua~</h3>
       <div class="container flex">
+        <p style="padding: 0 20px; color:#999" v-if="!currentGuard || !currentGuard.uid">
+          点击按钮开始抽取，再次点击停止，最终显示的则为今晚的幸运儿。
+        </p>
         <img v-if="currentGuard.face" class="guard-face" :src="currentGuard.face + '@128w_128h'" alt="">
         <p v-if="currentGuard && currentGuard.uid">
           <span>{{ currentGuard.is_alive ? '[在线]' : '[不在]' }}</span>
@@ -36,7 +39,7 @@
       </div>
       <div>
         <button class="btn-mua" @click="onMua">
-          {{ active ? 'Mua谁呢？' : '就Mua你了！' }}
+          {{ active ? '就Mua你了！' : 'Mua谁呢？' }}
         </button>
       </div>
       <h3 class="rank-title">刀了榜</h3>
@@ -95,11 +98,13 @@ export default defineComponent({
     })
 
     const currentGuard = ref({})
-    const active = ref(false)
+    const active = ref<boolean>(false)
 
     const rankList = ref<any[]>([])
 
-    rankList.value = storage.get('moni/rank/mua') || []
+    rankList.value = (storage.get('moni/rank/mua') || []).sort((left: any, right: any) => {
+      return right.count - left.count
+    })
 
     let timer: any
     const onMua = () => {
@@ -116,7 +121,7 @@ export default defineComponent({
         }
 
         rankList.value = rankList.value.sort((left: any, right: any) => {
-          return left.count - right.count
+          return right.count - left.count
         })
         storage.set('moni/rank/mua', rankList.value.map(({ uid, username, face, count, is_alive }) => {
           return { uid, username, face, count, is_alive }
@@ -137,7 +142,8 @@ export default defineComponent({
       onRefresh,
       currentGuard,
       onMua,
-      rankList
+      rankList,
+      active
     }
   }
 })
