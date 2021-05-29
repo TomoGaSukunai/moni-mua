@@ -168,11 +168,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   color: #2c3e50;
-  margin-top: 60px;
-}
-
-body {
-  padding-top: 40px
+  display: flex;
+  min-height: 100vh;
 }
 
 ul, li {
