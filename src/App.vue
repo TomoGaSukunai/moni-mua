@@ -35,7 +35,9 @@
         </p>
       </div>
       <div>
-        <button class="btn-mua" @click="onMua">Mua~</button>
+        <button class="btn-mua" @click="onMua">
+          {{ active ? 'Mua谁呢？' : '就Mua你了！' }}
+        </button>
       </div>
       <h3 class="rank-title">刀了榜</h3>
       <ul class="rank-list no-scrollbar">
@@ -105,9 +107,6 @@ export default defineComponent({
       if (active.value) {
         active.value = false
         timer && clearInterval(timer)
-      } else {
-        active.value = true
-        currentGuard.value = getRandomGuard()
         const index = rankList.value.findIndex((item: any) => item.uid === (currentGuard.value as any).uid)
 
         if (index === -1) {
@@ -122,7 +121,9 @@ export default defineComponent({
         storage.set('moni/rank/mua', rankList.value.map(({ uid, username, face, count, is_alive }) => {
           return { uid, username, face, count, is_alive }
         }))
-
+      } else {
+        active.value = true
+        currentGuard.value = getRandomGuard()
         timer = setInterval(() => {
           currentGuard.value = getRandomGuard()
         }, 10)
