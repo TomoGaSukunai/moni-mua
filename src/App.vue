@@ -27,9 +27,9 @@
     </div>
     <div class="flex-1">
       <h3 class="title">朝海沫霓Moni Mua~</h3>
-      <div class="container flex" v-if="currentGuard && currentGuard.uid">
+      <div class="container flex">
         <img v-if="currentGuard.face" class="guard-face" :src="currentGuard.face + '@128w_128h'" alt="">
-        <p>
+        <p v-if="currentGuard && currentGuard.uid">
           <span>{{ currentGuard.is_alive ? '[在线]' : '[不在]' }}</span>
           {{ currentGuard.username }}
         </p>
