@@ -4,20 +4,20 @@ import { ref } from 'vue'
 // https://json2jsonp.com/?url=http://domain.com/some/json&callback=cbfunc
 // https://api.live.bilibili.com/guard/topList?roomid=23001181&ruid=1589117610&page=1
 const http = axios.create({
-    baseURL: 'https://json2jsonp.com',
+    baseURL: './api/req',
 })
 
 http.interceptors.response.use(config => {
     const data = config.data
-    return JSON.parse(data.replace(/^_(?:_jsonp)?\((.*)\)$/, '$1'))
+    return data
+    // return JSON.parse(data)
 })
-
 
 const fetchGuardList = async (page = 1, refresh = false): Promise<any> => {
     const t = refresh ? `&t=${Date.now()}` : ''
     return await http.get('', {
         params: {
-            url: `https://api.live.bilibili.com/guard/topList?roomid=23001181&page_size=29&ruid=1589117610&page=${page}${t}`,
+            url: `https://api.live.bilibili.com/guard/topList?roomid=23001181&ruid=1589117610&page_size=29&page=${page}${t}`,
             callback: '_',
         }
     })
